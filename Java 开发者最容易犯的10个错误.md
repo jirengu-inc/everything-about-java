@@ -126,7 +126,7 @@ Exception in thread "main" java.lang.ClassCastException: java.lang.Integer canno
 	at ...
 ~~~
 
-使用原始类型的 collection 是很危险的，因为原始类型没有泛型检查。Set / Set<?> / Set<Object> 之间有非常大的差异，详情可以看看《[Set vs. Set<?>](https://www.programcreek.com/2013/12/raw-type-set-vs-unbounded-wildcard-set/)》和《[Java Type Erasure Mechanism](https://www.programcreek.com/2011/12/java-type-erasure-mechanism-example/)》
+使用原始类型的 collection 是很危险的，因为原始类型没有泛型检查。`Set / Set<?> / Set<Object>` 之间有非常大的差异，详情可以看看《[Set vs. Set<?>](https://www.programcreek.com/2013/12/raw-type-set-vs-unbounded-wildcard-set/)》和《[Java Type Erasure Mechanism](https://www.programcreek.com/2011/12/java-type-erasure-mechanism-example/)》。
 
 ## 6 访问级别设置过高
 
