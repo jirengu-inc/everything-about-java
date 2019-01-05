@@ -1,7 +1,7 @@
 
 原文：https://www.programcreek.com/2014/05/top-10-mistakes-java-developers-make/
 
-## 将 Array 转换成 ArrayList 时出错
+## 1 将 Array 转换成 ArrayList 时出错
 
 一些开发者经常用这样的代码将 Array 转换成 ArrayList
 
@@ -19,7 +19,7 @@ ArrayList<String> arrayList = new ArrayList<String>(Arrays.asList(arr));
 
 ArrayList 的构造函数可以接受一个 Collection 实例，而 Collection 是 java.util.Arrays.ArrayList 的超类。
 
-## 检查 array 里是否含有某个值时出错
+## 2 检查 array 里是否含有某个值时出错
 
 一些开发者会这么写：
 
@@ -46,7 +46,7 @@ return false;
 
 这两种写法中，前者可读性更好。
 
-## 遍历 list 移除元素时出错
+## 3 遍历 list 移除元素时出错
 
 下面的代码在迭代时移除了元素：
 
@@ -98,11 +98,11 @@ while (iter.hasNext()) {
 
 代码 1 中的 foreach 则是每次循环先调用 .remove() 再调用 .next()，导致 ConcurrentModificationException 异常，如果你想深入了解，可以[看看 ArrayList.iterator() 的源码](https://www.programcreek.com/2014/01/deep-understanding-of-arraylist-iterator/)。
 
-## 用 Hashtabl 还是用 HashMap
+## 4 用 Hashtabl 还是用 HashMap
 
 一般来说，算法中的 Hashtable 是一种常见的数据结构的名字。但是在 Java 中，这种数据结构的名字却是 HashMap，不是 Hashtable。Java 中 Hashtable 和 HashMap 的最重要的区别之一是 Hashtable 是同步的（synchronized）。因此大部分时候你不需要用 Hashtable，应该用 HashMap。
 
-## 直接使用 Collection 的原始类型时出错
+## 5 直接使用 Collection 的原始类型时出错
 
 在 Java 中，「原始类型」和「无限制通配符类型」很容易被搞混。举例来说，Set 是一个原始类型，而 Set<?> 是一个无限制通配符类型。
 
@@ -128,11 +128,11 @@ Exception in thread "main" java.lang.ClassCastException: java.lang.Integer canno
 
 使用原始类型的 collection 是很危险的，因为原始类型没有泛型检查。Set / Set<?> / Set<Object> 之间有非常大的差异，详情可以看看《[Set vs. Set<?>](https://www.programcreek.com/2013/12/raw-type-set-vs-unbounded-wildcard-set/)》和《[Java Type Erasure Mechanism](https://www.programcreek.com/2011/12/java-type-erasure-mechanism-example/)》
 
-## 访问级别设置过高
+## 6 访问级别设置过高
 
 很多开发者为了省事，把类字段标记为 public，这不是个好习惯。好习惯应该是将访问级别设置得约低约好。
 
-## ArrayList 和 LinkedList 选用错误
+## 7 ArrayList 和 LinkedList 选用错误
 
 如果不了解 ArrayList 和 LinkedList 的区别，你很容易会倾向于使用 ArrayList，因为它看起来更常见。
 
@@ -140,7 +140,7 @@ Exception in thread "main" java.lang.ClassCastException: java.lang.Integer canno
 
 如果你想深入了解这些性能差异，可以看看《[ArrayList vs. LinkedList vs. Vector](https://www.programcreek.com/2013/03/arraylist-vs-linkedlist-vs-vector/)》
 
-## 可变还是不可变？
+## 8 可变还是不可变？
 
 不可变对象有很多好处，比如简单、安全等。但是不可变对了要求每次改动都生成新的对象，对象一多就容易对垃圾回收造成压力。我们应该在可变对象和不可变对象上找到一个平衡点。
 
@@ -155,7 +155,7 @@ for(String s: arr){
 
 还有一些情况值得使用可变对象。比如你可以让一个可变对象多次进出不同的方法，这样你就可以收集多个结果。再比如排序和过滤操作，虽然你可以返回新的被排序之后的对象，但是如果元素数量众多，这就会[浪费不少内存](https://stackoverflow.com/a/23616293/1262580)。
 
-## 超类和子类的构造函数
+## 9 超类和子类的构造函数
 
 ~~~
 class Super {
@@ -190,7 +190,7 @@ Sub 类的两个构造函数，一个有参数一个没有参数，都会调用 
 
 想了解更多详情，可以看《[Constructors of Sub and Super Classes in Java?](https://www.programcreek.com/2013/04/what-are-the-frequently-asked-questions-about-constructors-in-java/)》
 
-## 用 "" 还是用构造函数
+## 10 用 "" 还是用构造函数
 
 字符串有两种构造途径：
 
