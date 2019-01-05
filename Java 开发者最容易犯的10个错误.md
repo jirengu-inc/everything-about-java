@@ -64,9 +64,9 @@ System.out.println(list);
 [b, d]
 ~~~
 
-这种代码的问题在于，当元素被移除时，list 的长度也随之变小了，index 也同时发生了变化。
+这种代码的问题在于，当元素被移除时，list 的长度也随之变小了，index 也同时发生了变化。所以，如果你想要在循环中使用 index 移除多个元素，它可能不能正常工作。
 
-你可能认为正确的方法是使用迭代器来删除元素，比如 foreach 循环看起来就是一个迭代器，其实并不是。
+你可能认为在循环中删除元素的正确方法是迭代器，比如 foreach 循环看起来就是一个迭代器，其实并不是。
 考虑以下代码（代码 1）：
 
 ~~~
@@ -96,7 +96,7 @@ while (iter.hasNext()) {
 
 你必须在每次循环里先调用 .next() 再调用 .remove()。
 
-代码 1 中的 foreach 则是每次循环先调用 .remove() 再调用 .next()，导致 ConcurrentModificationException 异常，如果你想深入了解，可以[看看 ArrayList.iterator() 的源码](https://www.programcreek.com/2014/01/deep-understanding-of-arraylist-iterator/)。
+在代码 1 中的 foreach 循环中，编译器会在元素的删除操作之后调用 .next()，导致 ConcurrentModificationException 异常，如果你想深入了解，可以[看看 ArrayList.iterator() 的源码](https://www.programcreek.com/2014/01/deep-understanding-of-arraylist-iterator/)。
 
 ## 4 用 Hashtabl 还是用 HashMap
 
@@ -126,11 +126,13 @@ Exception in thread "main" java.lang.ClassCastException: java.lang.Integer canno
 	at ...
 ~~~
 
-使用原始类型的 collection 是很危险的，因为原始类型没有泛型检查。`Set / Set<?> / Set<Object>` 之间有非常大的差异，详情可以看看《[Set vs. Set<?>](https://www.programcreek.com/2013/12/raw-type-set-vs-unbounded-wildcard-set/)》和《[Java Type Erasure Mechanism](https://www.programcreek.com/2011/12/java-type-erasure-mechanism-example/)》
+使用原始类型的 collection 是很危险的，因为原始类型没有泛型检查。Set / Set<?> / Set<Object> 之间有非常大的差异，详情可以看看《[Set vs. Set<?>](https://www.programcreek.com/2013/12/raw-type-set-vs-unbounded-wildcard-set/)》和《[Java Type Erasure Mechanism](https://www.programcreek.com/2011/12/java-type-erasure-mechanism-example/)》
 
 ## 6 访问级别设置过高
 
-很多开发者为了省事，把类字段标记为 public，这不是个好习惯。好习惯应该是将访问级别设置得约低约好。
+很多开发者为了省事，把类字段标记为 public，这不是个好习惯。好习惯应该是将访问级别设置得越低越好。
+
+详见《[public, default, protected, and private](https://www.programcreek.com/2011/11/java-access-level-public-protected-private/)》。
 
 ## 7 ArrayList 和 LinkedList 选用错误
 
@@ -138,13 +140,13 @@ Exception in thread "main" java.lang.ClassCastException: java.lang.Integer canno
 
 但是，ArrayList 和 LinkedList 有巨大的性能差异。简单来说，如果 add/remove 操作较多，则应该使用 LinkedList；如果随机访问操作较多，则应该使用 ArrayList。
 
-如果你想深入了解这些性能差异，可以看看《[ArrayList vs. LinkedList vs. Vector](https://www.programcreek.com/2013/03/arraylist-vs-linkedlist-vs-vector/)》
+如果你想深入了解这些性能差异，可以看看《[ArrayList vs. LinkedList vs. Vector](https://www.programcreek.com/2013/03/arraylist-vs-linkedlist-vs-vector/)》。
 
 ## 8 可变还是不可变？
 
 不可变对象有很多好处，比如简单、安全等。但是不可变对了要求每次改动都生成新的对象，对象一多就容易对垃圾回收造成压力。我们应该在可变对象和不可变对象上找到一个平衡点。
 
-一般来说，可变对象可以避免产生太多中间对象。一个经典的例子就是链接大量字符串。如果你使用不可变字符串，你就会造出许多中间对象，给垃圾回收造成压力。这既浪费时间又消耗 CPU，所以这种情况下你应该使用可变对象，如 StringBuilder:
+一般来说，可变对象可以避免产生太多中间对象。一个经典的例子就是连接大量字符串。如果你使用不可变字符串，你就会造出许多用完即弃的中间对象。这既浪费时间又消耗 CPU，所以这种情况下你应该使用可变对象，如 StringBuilder:
 
 ~~~
 String result="";
@@ -153,7 +155,9 @@ for(String s: arr){
 }
 ~~~
 
-还有一些情况值得使用可变对象。比如你可以让一个可变对象多次进出不同的方法，这样你就可以收集多个结果。再比如排序和过滤操作，虽然你可以返回新的被排序之后的对象，但是如果元素数量众多，这就会[浪费不少内存](https://stackoverflow.com/a/23616293/1262580)。
+还有一些情况值得使用可变对象。比如你可以通过将可变对象传入方法来收集多个结果，从而绕开语法的限制。再比如排序和过滤操作，虽然你可以返回新的被排序之后的对象，但是如果元素数量众多，这就会[浪费不少内存](https://stackoverflow.com/a/23616293/1262580)。
+
+扩展阅读《[为什么字符串是不可变的](https://www.programcreek.com/2013/04/why-string-is-immutable-in-java/)》。
 
 ## 9 超类和子类的构造函数
 
@@ -188,11 +192,11 @@ Sub 类的两个构造函数，一个有参数一个没有参数，都会调用 
 2. 删掉 Super 类里的有参数的构造函数
 3. 在 Sub 类的构造函数里添加 super(value) 
 
-想了解更多详情，可以看《[Constructors of Sub and Super Classes in Java?](https://www.programcreek.com/2013/04/what-are-the-frequently-asked-questions-about-constructors-in-java/)》
+想了解更多详情，可以看《[Constructors of Sub and Super Classes in Java?](https://www.programcreek.com/2013/04/what-are-the-frequently-asked-questions-about-constructors-in-java/)》。
 
 ## 10 用 "" 还是用构造函数
 
-字符串有两种构造途径：
+字符串可以通过两种途径来构造：
 
 ~~~
 // 1. 使用双引号
@@ -203,7 +207,7 @@ String y = new String("abc");
 
 有什么区别呢？
 
-下面的代码可以很快的告诉你区别：
+下面的代码可以很快地告诉你区别：
 
 ~~~
 String a = "abcd";
