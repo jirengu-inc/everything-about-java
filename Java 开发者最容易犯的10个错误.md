@@ -66,7 +66,7 @@ System.out.println(list);
 
 这种代码的问题在于，当元素被移除时，list 的长度也随之变小了，index 也同时发生了变化。
 
-你可能认为正确的方法是使用迭代器来删除元素，比如 foreach 循环看起来就是一个迭代器，其实并不是。
+你可能认为正确的方法是使用迭代器来删除元素，比如 foreach 循环看起来就是一个迭代器，其实这样还是有问题。
 考虑以下代码（代码 1）：
 
 ~~~
@@ -98,7 +98,7 @@ while (iter.hasNext()) {
 
 代码 1 中的 foreach 则是每次循环先调用 .remove() 再调用 .next()，导致 ConcurrentModificationException 异常，如果你想深入了解，可以[看看 ArrayList.iterator() 的源码](https://www.programcreek.com/2014/01/deep-understanding-of-arraylist-iterator/)。
 
-## 4 用 Hashtabl 还是用 HashMap
+## 4 用 Hashtable 还是用 HashMap
 
 一般来说，算法中的 Hashtable 是一种常见的数据结构的名字。但是在 Java 中，这种数据结构的名字却是 HashMap，不是 Hashtable。Java 中 Hashtable 和 HashMap 的最重要的区别之一是 Hashtable 是同步的（synchronized）。因此大部分时候你不需要用 Hashtable，应该用 HashMap。
 
@@ -130,7 +130,7 @@ Exception in thread "main" java.lang.ClassCastException: java.lang.Integer canno
 
 ## 6 访问级别设置过高
 
-很多开发者为了省事，把类字段标记为 public，这不是个好习惯。好习惯应该是将访问级别设置得约低约好。
+很多开发者为了省事，把类字段标记为 public，这不是个好习惯。好习惯应该是将访问级别设置得越低越好。
 
 ## 7 ArrayList 和 LinkedList 选用错误
 
